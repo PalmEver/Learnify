@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import * as FaIcon from "react-icons/fa";
+import * as FaIcons from "react-icons/fa";
+import { Link } from "react-router-dom";
 import Logo from "../assets/logo.png";
+import { useStoreContext } from "../context/StoreContext";
 
 const Navigation = () => {
   const [sidebar, setSidebar] = useState(false);
-
+  const { basket } = useStoreContext();
+  const basketCount = basket?.items.length;
   const showSidebar = () => setSidebar(!sidebar);
 
   return (
@@ -12,22 +15,24 @@ const Navigation = () => {
       <div className="nav">
         <div className="nav__left">
           <div className="nav__left__hamburger">
-            <FaIcon.FaBars onClick={showSidebar} />
+            <FaIcons.FaBars onClick={showSidebar} />
             <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
               <ul className="nav-menu-items" onClick={showSidebar}>
                 <li className="cancel">
-                  <FaIcon.FaChevronLeft />
+                  <FaIcons.FaChevronLeft />
                 </li>
-                <li className="nav-menu-icons__header">Navigation</li>
-                <li>Categories</li>
-                <li>Courses</li>
+
+                <li className="nav-menu-items__header">Navigation</li>
+                <li>Home</li>
               </ul>
             </nav>
           </div>
-          <img className="nav__left__logo" src={Logo} alt="logo" />
+          <img src={Logo} className="nav__left__logo" alt="logo" />
+
           <ul className="nav__left__list">
-            <div className="nav__left__list__item">Categories</div>
-            <div className="nav__left__list__item">Courses</div>
+            <Link to="/">
+              <li className="nav__left__list__item">Home</li>
+            </Link>
           </ul>
         </div>
         <div className="nav__right">
@@ -38,13 +43,20 @@ const Navigation = () => {
               placeholder="Search Courses..."
             />
             <button className="nav__right__search__button">
-              <FaIcon.FaSearch />
+              <i className="fas fa-search"></i>
             </button>
           </form>
+          <Link to="/basket">
+            <div className="nav__right__cart">
+              <FaIcons.FaShoppingCart />
+              {basketCount! > 0 && (
+                <span className="nav__right__cart__count">{basketCount}</span>
+              )}
+            </div>
+          </Link>
         </div>
       </div>
     </div>
   );
 };
-
 export default Navigation;
