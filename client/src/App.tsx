@@ -1,19 +1,21 @@
 import React, { useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
+import "./sass/main.scss";
 import Navigation from "./components/Navigation";
-import DetailPage from "./pages/DetailPage";
-import Homepage from "./pages/Homepage";
-import LoginPage from "./pages/Login";
 import "antd/dist/antd.min.css";
-import Category from "./components/Categories";
+import HomePage from "./pages/Homepage";
+import Login from "./pages/Login";
+import DetailPage from "./pages/DetailPage";
+import Categories from "./components/Categories";
 import CategoryPage from "./pages/CategoryPage";
 import DescriptionPage from "./pages/DescriptionPage";
 import BasketPage from "./pages/BasketPage";
-import { useStoreContext } from "./context/StoreContext";
 import agent from "./actions/agent";
+import { useAppDispatch } from "./redux/store/configureStore";
+import { setBasket } from "./redux/slice/basketSlice";
 
 function App() {
-  const { setBasket } = useStoreContext();
+  const dispatch = useAppDispatch();
 
   function getCookie(name: string) {
     return (
@@ -24,27 +26,23 @@ function App() {
 
   useEffect(() => {
     const clientId = getCookie("clientId");
-
     if (clientId) {
       agent.Baskets.get()
-        .then((response) => {
-          setBasket(response);
-        })
+        .then((basket) => dispatch(setBasket(basket)))
         .catch((error) => console.log(error));
     }
-  }, [setBasket]);
-
+  }, [dispatch]);
   return (
     <>
       <Navigation />
-      <Route exact path="/" component={Category} />
+      <Route exact path="/" component={Categories} />
       <Switch>
-        <Route exact path="/" component={Homepage} />
-        <Route exact path="/category/:id" component={CategoryPage} />
-        <Route exact path="/basket" component={BasketPage} />
+        <Route exact path="/" component={HomePage} />
         <Route exact path="/course/:id" component={DescriptionPage} />
-        <Route exact path="/Login" component={LoginPage} />
-        <Route exact path="/Detail" component={DetailPage} />
+        <Route exact path="/basket" component={BasketPage} />
+        <Route exact path="/category/:id" component={CategoryPage} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/detail" component={DetailPage} />
       </Switch>
     </>
   );
