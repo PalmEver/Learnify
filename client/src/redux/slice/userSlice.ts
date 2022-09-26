@@ -1,23 +1,50 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
+import { notification } from "antd";
 import agent from "../../actions/agent";
+import { Course } from "../../models/course";
 import { Login, Register, User } from "../../models/user";
 import { setBasket } from "./basketSlice";
 
 interface UserState {
   user: User | null;
+  userCourses: Course[];
 }
 
 const initialState: UserState = {
   user: null,
+  userCourses: [],
 };
+
+export const fetchCurrentUser = createAsyncThunk<User>(
+  "user/fetchCurrentUser",
+  async (_, thunkAPI) => {
+    thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem("user")!)));
+    try {
+      const userDto = await agent.Users.currentUser();
+      const { basket, courses, ...user } = userDto;
+      if (basket) thunkAPI.dispatch(setBasket(basket));
+      if (courses) thunkAPI.dispatch(setUserCourses(courses));
+      localStorage.setItem("user", JSON.stringify(user));
+      return user;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.data });
+    }
+  },
+  {
+    condition: () => {
+      if (!localStorage.getItem("user")) return false;
+    },
+  }
+);
 
 export const signInUser = createAsyncThunk<User, Login>(
   "user/signin",
   async (data, thunkAPI) => {
     try {
       const userData = await agent.Users.login(data);
-      const {basket, ...user} = userData;
-      if(basket) thunkAPI.dispatch(setBasket(basket));
+      const { basket, courses, ...user } = userData;
+      if (basket) thunkAPI.dispatch(setBasket(basket));
+      if (courses) thunkAPI.dispatch(setUserCourses(courses));
       localStorage.setItem("user", JSON.stringify(user));
       return user;
     } catch (err: any) {
@@ -47,16 +74,27 @@ export const userSlice = createSlice({
       state.user = null;
       localStorage.removeItem("user");
     },
-    getUser: (state) => {
-      const user = localStorage.getItem("user");
-      if (user) {
-        state.user = JSON.parse(user);
-      }
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+    setUserCourses: (state, action) => {
+      state.userCourses = action.payload;
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchCurrentUser.rejected, (state) => {
+      state.user = null;
+      localStorage.removeItem("user");
+      notification.error({
+        message: "Session expired - please login again",
+      });
+    });
     builder.addMatcher(
-      isAnyOf(signInUser.fulfilled, registerUser.fulfilled),
+      isAnyOf(
+        signInUser.fulfilled,
+        registerUser.fulfilled,
+        fetchCurrentUser.fulfilled
+      ),
       (state, action) => {
         state.user = action.payload;
       }
@@ -70,4 +108,4 @@ export const userSlice = createSlice({
   },
 });
 
-export const { signOut, getUser } = userSlice.actions;
+export const { signOut, setUser, setUserCourses } = userSlice.actions;
