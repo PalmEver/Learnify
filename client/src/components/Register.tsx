@@ -1,6 +1,7 @@
 import { Button, Card, Form, Input, notification, Typography } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Register } from "../models/user";
 import { registerUser } from "../redux/slice/userSlice";
 import { useAppDispatch } from "../redux/store/configureStore";
@@ -33,8 +34,11 @@ const RegisterComponent = ({ toggleRegister }: Props) => {
     form.resetFields();
   };
 
+  const history = useHistory();
+
   const submitUser = async (e: SyntheticEvent) => {
     e.preventDefault();
+
     try {
       if (
         email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) &&
@@ -42,6 +46,7 @@ const RegisterComponent = ({ toggleRegister }: Props) => {
         username.length >= 5
       ) {
         await dispatch(registerUser(values));
+        history.push("/profile");
       }
       resetForm();
     } catch (err: any) {

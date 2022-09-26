@@ -5,6 +5,10 @@ using API.ErrorResponse;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using AutoMapper;
 
 namespace API.Controllers
 {
@@ -12,8 +16,12 @@ namespace API.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly TokenService _tokenService;
-        public UsersController(UserManager<User> userManager, TokenService tokenService)
+        private readonly StoreContext _context;
+        private readonly IMapper _mapper;
+        public UsersController(UserManager<User> userManager, TokenService tokenService, StoreContext context, IMapper mapper)
         {
+            _mapper = mapper;
+            _context = context;
             _tokenService = tokenService;
             _userManager = userManager;
         }
@@ -29,10 +37,22 @@ namespace API.Controllers
                 return Unauthorized(new ApiResponse(401));
             }
 
+            var userBasket = await ExtractBasket(user.UserName);
+            var basket = await ExtractBasket(Request.Cookies["clientId"]);
+
+            if (basket != null)
+            {
+                if (userBasket != null) _context.Baskets.Remove(userBasket);
+                basket.ClientId = user.UserName;
+                Response.Cookies.Delete("clientId");
+                await _context.SaveChangesAsync();
+            }
+
             return new UserDto
             {
                 Email = user.Email,
-                Token = await _tokenService.GenerateToken(user)
+                Token = await _tokenService.GenerateToken(user),
+                Basket = basket != null ? _mapper.Map<Basket, BasketDto>(basket) : _mapper.Map<Basket, BasketDto>(userBasket)
             };
         }
 
@@ -61,5 +81,20 @@ namespace API.Controllers
                 Token = await _tokenService.GenerateToken(user)
             };
         }
+
+        private async Task<Basket> ExtractBasket(string clientId)
+        {
+            if (string.IsNullOrEmpty(clientId))
+            {
+                Response.Cookies.Delete("clientId");
+                return null;
+            }
+            return await _context.Baskets
+                .Include(b => b.Items)
+                .ThenInclude(i => i.Course)
+                .OrderBy(i => i.Id)
+                .FirstOrDefaultAsync(x => x.ClientId == clientId);
+        }
+
     }
 }
