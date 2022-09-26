@@ -2,9 +2,15 @@ import {
   CardCvcElement,
   CardExpiryElement,
   CardNumberElement,
+  useElements,
+  useStripe,
 } from "@stripe/react-stripe-js";
-import { Card, Form, Input } from "antd";
-import { ChangeEvent, useState } from "react";
+import { Card, Form, Input, notification } from "antd";
+import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { useHistory } from "react-router-dom";
+import agent from "../actions/agent";
+import { removeBasket } from "../redux/slice/basketSlice";
+import { useAppDispatch, useAppSelector } from "../redux/store/configureStore";
 import CheckoutSummary from "./CheckoutSummary";
 
 const Checkout = () => {
@@ -15,6 +21,53 @@ const Checkout = () => {
   };
 
   const [form] = Form.useForm();
+
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+
+  const { basket } = useAppSelector((state) => state.basket);
+
+  const handlePayment = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    if (!stripe || !elements) return;
+
+    try {
+      const cardElement = elements.getElement(CardNumberElement);
+
+      const paymentResult = await stripe.confirmCardPayment(
+        basket?.clientSecret!,
+        {
+          payment_method: {
+            card: cardElement!,
+            billing_details: {
+              name: cardName,
+            },
+          },
+        }
+      );
+      if (paymentResult.paymentIntent?.status === "succeeded") {
+        await agent.Users.addCourse();
+
+        notification.success({
+          message: "Your payment is successful",
+        });
+        dispatch(removeBasket());
+        await agent.Baskets.clear();
+        setTimeout(() => {
+          history.push("/profile");
+        }, 1000);
+      } else {
+        notification.error({
+          message: paymentResult.error?.message!,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="checkout">
@@ -57,7 +110,7 @@ const Checkout = () => {
         </Card>
       </div>
       <div className="checkout__summary">
-        <CheckoutSummary />
+        <CheckoutSummary handleSubmit={handlePayment} stripe={stripe} />
       </div>
     </div>
   );

@@ -9,21 +9,33 @@ import Categories from "./components/Categories";
 import CategoryPage from "./pages/CategoryPage";
 import DescriptionPage from "./pages/DescriptionPage";
 import BasketPage from "./pages/BasketPage";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch } from "./redux/store/configureStore";
 import { fetchBasketAsync } from "./redux/slice/basketSlice";
 import Dashboard from "./pages/Dashboard";
-import { getUser } from "./redux/slice/userSlice";
 import PrivateRoute from "./components/PrivateRoute";
 import CheckoutPage from "./pages/CheckoutPage";
+import { fetchCurrentUser } from "./redux/slice/userSlice";
+import Loading from "./components/Loading";
 
 function App() {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
+
+  const appInit = useCallback(async () => {
+    try {
+      await dispatch(fetchCurrentUser());
+      await dispatch(fetchBasketAsync());
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchBasketAsync());
-    dispatch(getUser());
-  }, [dispatch]);
+    appInit().then(() => setLoading(false));
+  }, [appInit]);
+
+  if (loading) return <Loading />;
 
   return (
     <>
