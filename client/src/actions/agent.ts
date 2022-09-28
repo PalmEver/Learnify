@@ -1,13 +1,16 @@
-import axios, { AxiosResponse } from "axios";
-import { Store } from "redux";
-import { Basket } from "../models/basket";
-import { Category } from "../models/category";
-import { Course } from "../models/course";
-import { PaginatedCourse } from "../models/paginatedCourse";
-import { Login, Register, User } from "../models/user";
+import axios, { AxiosResponse } from 'axios';
+import { PaginatedCourse } from '../models/paginatedCourse';
+import { Category } from '../models/category';
+import { Course } from '../models/course';
+import { Basket } from '../models/basket';
+import { Login, Register, User } from '../models/user';
+import { Store } from 'redux';
+import { Lecture } from '../models/lecture';
 
+axios.defaults.baseURL = 'http://localhost:5000/api';
 
-axios.defaults.baseURL = "http://localhost:5000/api";
+const responseBody = <T>(response: AxiosResponse<T>) => response.data;
+
 axios.defaults.withCredentials = true;
 
 export const axiosInterceptor = (store: Store) => {
@@ -17,8 +20,6 @@ export const axiosInterceptor = (store: Store) => {
     return config;
   });
 };
-
-const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const requests = {
   get: <T>(url: string, params?: URLSearchParams) =>
@@ -30,26 +31,25 @@ const requests = {
 };
 
 const Users = {
-  login: (values: Login) => requests.post<User>("users/login", values),
-  register: (values: Register) => requests.post<User>("users/register", values),
-  addCourse: () => requests.post("users/purchaseCourses", {}),
-  currentUser: () => requests.get<User>("users/currentUser"),
+  login: (values: Login) => requests.post<User>('users/login', values),
+  register: (values: Register) => requests.post<User>('users/register', values),
+  addCourse: () => requests.post('users/purchaseCourses', {}),
+  currentUser: () => requests.get<User>('users/currentUser'),
 };
 
 const Courses = {
   list: (params?: URLSearchParams) =>
-    requests.get<PaginatedCourse>("courses", params),
-  getById: (id: string) => requests.get<Course>(`courses/${id}`),
+    requests.get<PaginatedCourse>('/courses', params),
+  getById: (id: string) => requests.get<Course>(`/courses/${id}`),
 };
 
 const Categories = {
-  list: (params?: URLSearchParams) =>
-    requests.get<Category[]>("categories", params),
-  getCategory: (id: number) => requests.get<Category>(`categories/${id}`),
+  list: () => requests.get<Category[]>('/categories'),
+  getCategory: (id: number) => requests.get<Category>(`/categories/${id}`),
 };
 
 const Baskets = {
-  get: () => requests.get<Basket>("basket"),
+  get: () => requests.get<Basket>('basket'),
   addItem: (courseId: string) =>
     requests.post<Basket>(`basket?courseId=${courseId}`, {}),
   removeItem: (courseId: string) => requests.del(`basket?courseId=${courseId}`),
@@ -57,8 +57,13 @@ const Baskets = {
 };
 
 const Payments = {
-  paymentIntent: () => requests.post<Basket>("payments", {}),
+  paymentIntent: () => requests.post<Basket>('payments', {}),
 };
+
+const Lectures  = {
+  getLectures: (courseId: string) => requests.get<Lecture>(`lectures/${courseId}`),
+  setCurrentLecture: (values: {lectureId: number, courseId: string}) => requests.put('lectures/setCurrentLecture', values)
+}
 
 const agent = {
   Courses,
@@ -66,6 +71,7 @@ const agent = {
   Baskets,
   Users,
   Payments,
+  Lectures,
 };
 
 export default agent;

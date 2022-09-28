@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Card, Col } from "antd";
 import * as FaIcons from "react-icons/fa";
+import { Card, Col } from "antd";
 import { Course } from "../models/course";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/store/configureStore";
@@ -17,6 +17,7 @@ const ShowCourses = ({ course }: Props) => {
   const dispatch = useAppDispatch();
 
   const { userCourses } = useAppSelector((state) => state.user);
+  const { currentLecture } = useAppSelector((state) => state.lecture);
 
   const checkWidth = (): void => {
     if (window.innerWidth > 1024) {
@@ -65,9 +66,11 @@ const ShowCourses = ({ course }: Props) => {
           </div>
           <div className="course__bottom">
             <div className="course__bottom__price">{course.price}</div>
-            {userCourses?.find((item) => item.id === course.id) !==
+            {userCourses?.find((item: Course) => item.id === course.id) !==
             undefined ? (
-              <div className="course__bottom__cart">Go to Course</div>
+              <Link to={`/learn/${course.id}/${currentLecture}`}>
+                <div className="course__bottom__cart">Go to Course</div>
+              </Link>
             ) : basket?.items.find((item) => item.courseId === course.id) !==
               undefined ? (
               <Link to="/basket">
@@ -75,12 +78,12 @@ const ShowCourses = ({ course }: Props) => {
               </Link>
             ) : (
               <div
-                onClick={() => {
-                  dispatch(addBasketItemAsync({ courseId: course.id }));
-                }}
+                onClick={() =>
+                  dispatch(addBasketItemAsync({ courseId: course.id }))
+                }
                 className="course__bottom__cart"
               >
-                Add to cart
+                Add to Cart
               </div>
             )}
           </div>
