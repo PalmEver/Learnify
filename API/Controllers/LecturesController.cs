@@ -29,7 +29,6 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("{courseId}")]
-
         public async Task<ActionResult<UserLectureDto>> GetLectures(Guid courseId)
         {
             var course = await _context.Courses.FindAsync(courseId);
@@ -51,7 +50,6 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPut("setCurrentLecture")]
-
         public async Task<ActionResult> UpdateCurrentLecture([FromBody] UpdateLectureDto updateLectureDto)
         {
 
