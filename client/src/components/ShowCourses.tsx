@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import * as FaIcons from "react-icons/fa";
-import { Card, Col } from "antd";
+import { Col } from "antd";
 import { Course } from "../models/course";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/store/configureStore";
