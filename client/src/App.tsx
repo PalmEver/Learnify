@@ -17,6 +17,11 @@ import PrivateRoute from "./components/PrivateRoute";
 import CheckoutPage from "./pages/CheckoutPage";
 import { fetchCurrentUser } from "./redux/slice/userSlice";
 import Loading from "./components/Loading";
+import CoursePage from "./pages/CoursePage";
+import InstructorPage from "./pages/InstructorPage";
+import CreateCourse from "./pages/CreateCourse";
+import { getCategoriesAsync } from "./redux/slice/categorySlice";
+import SectionPage from "./pages/SectionPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -26,6 +31,7 @@ function App() {
     try {
       await dispatch(fetchCurrentUser());
       await dispatch(fetchBasketAsync());
+      await dispatch(getCategoriesAsync());
     } catch (error) {
       console.log(error);
     }
@@ -40,16 +46,29 @@ function App() {
   return (
     <>
       <Navigation />
-      <Route exact path="/" component={Categories} />
+      <Categories />
+      {/* <Route exact path="/" component={Categories} /> */}
       <Switch>
         <Route exact path="/" component={Homepage} />
         <Route exact path="/course/:id" component={DescriptionPage} />
-        <PrivateRoute exact path="/profile" component={Dashboard} />
         <Route exact path="/category/:id" component={CategoryPage} />
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/detail" component={DetailPage} />
         <Route exact path="/basket" component={BasketPage} />
+        <PrivateRoute exact path="/profile" component={Dashboard} />
         <PrivateRoute exact path="/checkout" component={CheckoutPage} />
+        <PrivateRoute
+          exact
+          path="/learn/:course/:lecture"
+          component={CoursePage}
+        />
+        <PrivateRoute exact path="/instructor" component={InstructorPage} />
+        <PrivateRoute
+          exact
+          path="/instructor/course"
+          component={CreateCourse}
+        />
+        <PrivateRoute exact path="/:course/lectures" component={SectionPage} />
       </Switch>
     </>
   );

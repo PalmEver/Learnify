@@ -34,7 +34,7 @@ namespace Infrastructure
                     };
 
                     await userManager.CreateAsync(instructor, "Password@123");
-                    await userManager.AddToRolesAsync(instructor, new[] { "Instructor, Student" });
+                    await userManager.AddToRolesAsync(instructor, new[] { "Instructor", "Student" });
                 }
 
                 if (!context.Categories.Any())
@@ -84,6 +84,53 @@ namespace Infrastructure
                     foreach (var item in requirements)
                     {
                         context.Requirements.Add(item);
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+
+                if (!context.Sections.Any())
+                {
+                    var sectionsData = File.ReadAllText("../Infrastructure/SeedData/sections.json");
+                    var sections = JsonSerializer.Deserialize<List<Section>>(sectionsData);
+
+                    foreach (var item in sections)
+                    {
+                        var course = await context.Courses.FindAsync(item.CourseId);
+
+                        var section = new Section
+                        {
+                            Id = item.Id,
+                            Name = item.Name,
+                            Course = course
+                        };
+
+                        context.Sections.Add(item);
+
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+
+                if (!context.Lectures.Any())
+                {
+                    var lecturesData = File.ReadAllText("../Infrastructure/SeedData/lectures.json");
+                    var lectures = JsonSerializer.Deserialize<List<Lecture>>(lecturesData);
+
+                    foreach (var item in lectures)
+                    {
+                        var section = await context.Sections.FindAsync(item.SectionId);
+
+                        var lecture = new Lecture
+                        {
+                            Id = item.Id,
+                            Title = item.Title,
+                            Url = item.Url,
+                            Section = section
+                        };
+
+                        context.Lectures.Add(item);
+
                     }
 
                     await context.SaveChangesAsync();
