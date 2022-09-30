@@ -7,14 +7,15 @@
       display: flex;
       align-items: center;
       padding: 30px;
-      justify-content: space-between;
+      justify-content: center;
 
       @media only screen and (max-width: $bp-medium) {
         flex-direction: column;
       }
   
       & h1 {
-        color: white; 
+        color: $color-grey-light-1; 
+        text-align: center !important;
       }
     }
   

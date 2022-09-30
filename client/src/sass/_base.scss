@@ -16,8 +16,8 @@ $color-primary: #ffff;
 $color-primary-dark: #4d4d4d;
 
 // COLOR VARIABLES
-$color-secondary-light: #7f7f7f;
-$color-secondary-dark: #697e7089;
+$color-secondary-light: #e39c38;
+$color-secondary-dark: #e39c38;
 
 // SHADOW
 $shadow-dark: 0 2rem 6rem rgba(0, 0, 0, 0.3);
@@ -43,4 +43,5 @@ h1, h2 {
 
 .ant-row {
     align-content: center !important;
+    justify-content: center;
 }
