@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Col, Radio, Row } from "antd";
+import { Col, Radio, Row } from "antd";
 import { Course } from "../models/course";
 import ShowCourses from "../components/ShowCourses";
 import { Pagination } from "antd";
@@ -49,27 +49,8 @@ const Homepage = () => {
         <h1>What to learn Next?</h1>
         <h2>New Courses picked just for you...</h2>
       </div>
-      <Row gutter={[24, 32]}>
-        <Col span={4}>
-          <Card title="Sorting Options">
-            <Radio.Group
-              options={sortOptions}
-              value={courseParams.sort}
-              onChange={(e) =>
-                dispatch(setCourseParams({ sort: e.target.value }))
-              }
-            />
-          </Card>
-          <Card title="Choose Category">
-            <Radio.Group
-              options={getCategories()}
-              value={courseParams.category}
-              onChange={(e) => {
-                dispatch(setCourseParams({ category: e.target.value }));
-              }}
-            />
-          </Card>
-        </Col>
+
+      <Row gutter={[24, 32]} justify={"center"}>
         <Col span={20}>
           <Row gutter={[24, 32]}>
             {data &&
@@ -77,9 +58,31 @@ const Homepage = () => {
                 return <ShowCourses key={index} course={course} />;
               })}
           </Row>
+          <div className="radio">
+            <h3>Sort</h3>
+            <Radio.Group
+              className="navbox"
+              options={sortOptions}
+              value={courseParams.sort}
+              onChange={(e) =>
+                dispatch(setCourseParams({ sort: e.target.value }))
+              }
+            />
+          </div>
+          <div className="radio">
+            <h3>Sort by Categories</h3>
+            <Radio.Group
+              options={getCategories()}
+              value={courseParams.category}
+              onChange={(e) => {
+                dispatch(setCourseParams({ category: e.target.value }));
+              }}
+            />
+          </div>
           <div className="pagination">
             {pagination && (
               <Pagination
+                size="small"
                 defaultCurrent={pagination?.pageIndex}
                 total={pagination?.totalCount}
                 onChange={onChange}

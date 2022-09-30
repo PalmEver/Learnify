@@ -7,17 +7,17 @@ $bp-medium: 50em; // 800px;
 $bp-small: 37.5em; // 600px;
 
 // COLORS
-$color-grey-light-1: #47574d;
-$color-grey-light-2: #aaa;
-$color-grey-dark-1: #e6e4e1;
-$color-grey-dark-2: #47574d;
+$color-grey-light-1: #669497;
+$color-grey-light-2: #669497;
+$color-grey-dark-1: #ffff;
+$color-grey-dark-2: #669497;
 
-$color-primary: #67a680;
-$color-primary-dark: #47574d;
+$color-primary: #ffff;
+$color-primary-dark: #4d4d4d;
 
 // COLOR VARIABLES
-$color-secondary-light: #4a765c;
-$color-secondary-dark: #70b575;
+$color-secondary-light: #e39c38;
+$color-secondary-dark: #e39c38;
 
 // SHADOW
 $shadow-dark: 0 2rem 6rem rgba(0, 0, 0, 0.3);
@@ -29,9 +29,19 @@ $border-dark: 2px solid #f4f2f2;
 
 html {
     box-sizing: border-box;
+    // background-color: #2e3033 !important;
 }
 
 body {
     font-family: $font-primary;
-    background-color: #ffffff !important;
+    // background-color: #2e3033 !important;
+}
+
+h1, h2 {
+    text-align: center !important;
+}
+
+.ant-row {
+    align-content: center !important;
+    justify-content: center;
 }

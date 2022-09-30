@@ -10,6 +10,7 @@
         font-size: 2rem;
         font-weight: bold;
         flex: 0 0 70%;
+        color: $color-grey-light-1;
       }
   
       &__courses {
@@ -36,4 +37,12 @@
       flex: 1;
       justify-content: flex-end;
     }
+  }
+
+  .ant-btn-primary {
+    background-color: $color-secondary-light !important;
+  }
+
+  .ant-btn-primary:hover{
+  background-color: #af7729 !important;
   }

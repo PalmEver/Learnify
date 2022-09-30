@@ -52,7 +52,49 @@ const ShowCourses = ({ course }: Props) => {
   return (
     <>
       <Col className="gutter-row" span={spanVal}>
-        <Card
+        <Col>
+          {/* <div className="container"> */}
+          <div className="card">
+            <h3 className="title">{course.title}</h3>
+            <div className="bar">
+              <div className="emptybar"></div>
+              <div className="filledbar"></div>
+              <div className="course__instructor">{course.instructor}</div>
+              <div className="course__rating">
+                {course.rating}
+                <span>{showStars(course.rating)}</span>
+              </div>
+              <div className="course__bottom__price">{course.price}</div>
+
+              {userCourses?.find((item: Course) => item.id === course.id) !==
+              undefined ? (
+                <Link to={`/learn/${course.id}/${currentLecture}`}>
+                  <div className="course__bottom__cart">Go to Course</div>
+                </Link>
+              ) : basket?.items.find((item) => item.courseId === course.id) !==
+                undefined ? (
+                <Link to="/basket">
+                  <div className="course__bottom__cart">Go to Cart</div>
+                </Link>
+              ) : (
+                <div
+                  onClick={() =>
+                    dispatch(addBasketItemAsync({ courseId: course.id }))
+                  }
+                  className="course__bottom__cart"
+                >
+                  Add to Cart
+                </div>
+              )}
+            </div>
+            {/* <div className="circle">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <circle className="stroke" cx="60" cy="60" r="50" />
+              </svg>
+            </div> */}
+          </div>
+          {/* </div> */}
+          {/* <Card
           hoverable
           cover={<img width="100%" alt="course-cover" src={course.image} />}
         >
@@ -87,7 +129,8 @@ const ShowCourses = ({ course }: Props) => {
               </div>
             )}
           </div>
-        </Card>
+        </Card> */}
+        </Col>
       </Col>
     </>
   );
