@@ -22,8 +22,9 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <div className="dashboard__header">
-        <h1>My Courses</h1>
+        <h1>Hi {user?.email}</h1>
       </div>
+      <h2>This is your courses:</h2>
       {!user?.roles?.includes("Instructor") && (
         <Button onClick={becomeInstructor} type="primary">
           Become an Instructor
