@@ -23,12 +23,12 @@ const Dashboard = () => {
     <div className="dashboard">
       <div className="dashboard__header">
         <h1>My Courses</h1>
-        {!user?.roles?.includes("Instructor") && (
-          <Button onClick={becomeInstructor} type="primary">
-            Become an Instructor
-          </Button>
-        )}
       </div>
+      {!user?.roles?.includes("Instructor") && (
+        <Button onClick={becomeInstructor} type="primary">
+          Become an Instructor
+        </Button>
+      )}
       <div className="dashboard__courses">
         <Row gutter={[48, 32]}>
           {userCourses.length > 0 ? (
