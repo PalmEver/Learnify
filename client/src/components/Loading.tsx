@@ -3,7 +3,7 @@ import { Spin } from "antd";
 const Loading = () => {
   return (
     <div className="loading">
-      <Spin size="large" tip="Loading..." />
+      <Spin style={{ color: "orange" }} size="large" tip="Loading..." />
     </div>
   );
 };

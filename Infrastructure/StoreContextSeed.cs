@@ -21,7 +21,7 @@ namespace Infrastructure
                     var student = new User
                     {
                         UserName = "student",
-                        Email = "student@tes.com"
+                        Email = "student@test.com"
                     };
 
                     await userManager.CreateAsync(student, "Password@123");
@@ -30,7 +30,7 @@ namespace Infrastructure
                     var instructor = new User
                     {
                         UserName = "instructor",
-                        Email = "instructor@tes.com"
+                        Email = "instructor@test.com"
                     };
 
                     await userManager.CreateAsync(instructor, "Password@123");
