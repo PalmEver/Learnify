@@ -72,6 +72,7 @@
         color: rgb(255, 255, 255);
         font-weight: bold;
         background-color: $color-grey-dark-2;
+        margin-top: 15px;
         padding: 10px 15px;
         border-radius: 5px;
         font-size: 1rem;
@@ -153,8 +154,8 @@
   }
   
   .emptybar {
-    background-color: #2e3033;
-    width: 100%;
+    background-color: #557c7f;
+    width: 150%;
     height: 100%;
   }
   
@@ -165,23 +166,25 @@
     width: 0px;
     height: 100%;
     background: rgb(0,154,217);
-    background: linear-gradient(90deg, rgba(0,154,217,1) 0%, rgb(149, 149, 149) 65%, rgb(248, 248, 248) 100%);
+    background: linear-gradient(90deg, rgba(0,154,217,1) 0%, rgb(240, 246, 69) 65%, rgb(251, 177, 50) 100%);
     transition: 0.6s ease-out;
   }
   
   .card:hover .filledbar {
-    width: 120px;
+    width: 200px;
     transition: 0.4s ease-out;
   }
   
   .circle {
     position: absolute;
+    margin-top: 100px;
+    margin-left: 20px;
     top: 150px;
     left: calc(50% - 60px);
   }
   
   .stroke {
-    stroke: white;
+    stroke:$color-grey-dark-2;
     stroke-dasharray: 360;
     stroke-dashoffset: 360;
     transition: 0.6s ease-out;
@@ -189,7 +192,11 @@
   
   svg {
     fill: #17141d;
-    stroke-width: 2px;
+  }
+
+  .round {
+    fill: #557c7f;
+    stroke-width: 3px;
   }
   
   .card:hover .stroke {
@@ -198,5 +205,5 @@
   }
 
   .fa-star{
-    background-color: #e59819;
+    background-color: #e59819 !important;
   }

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Learning, Requirement } from "../models/course";
+import { Course, Learning, Requirement } from "../models/course";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/store/configureStore";
@@ -11,6 +11,9 @@ const DescriptionPage = () => {
   const course = useAppSelector((state) =>
     coursesSelector.selectById(state, id)
   );
+
+  const { userCourses } = useAppSelector((state) => state.user);
+  const { currentLecture } = useAppSelector((state) => state.lecture);
 
   const { basket } = useAppSelector((state) => state.basket);
   const dispatch = useAppDispatch();
@@ -144,13 +147,21 @@ const DescriptionPage = () => {
             </div>
           </div>
           <div className="description-page__sidebar__box__button">
-            {basket?.items.find((item) => item.courseId === course?.id) !==
+            {userCourses?.find((item: Course) => item.id === course?.id) !==
             undefined ? (
+              <Link
+                className="description-page__sidebar__box__button--cart"
+                to={`/learn/${course?.id}/${currentLecture}`}
+              >
+                Go to Course
+              </Link>
+            ) : basket?.items.find((item) => item.courseId === course?.id) !==
+              undefined ? (
               <Link
                 className="description-page__sidebar__box__button--cart"
                 to="/basket"
               >
-                Go to cart
+                Go to Cart
               </Link>
             ) : (
               <div
@@ -159,12 +170,9 @@ const DescriptionPage = () => {
                 }
                 className="description-page__sidebar__box__button--cart"
               >
-                Add to cart
+                Add to Cart
               </div>
             )}
-            <div className="description-page__sidebar__box__button--text">
-              Book now
-            </div>
           </div>
         </div>
         <div className="description-page__sidebar__body">

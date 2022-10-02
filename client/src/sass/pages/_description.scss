@@ -38,7 +38,7 @@
           &--name {
             font-size: 1.4rem;
   
-            color: $color-secondary-light;
+            color: #000;
             font-weight: bold;
             display: block;
           }
@@ -48,7 +48,7 @@
           &--date {
             font-size: 1.4rem;
   
-            color: $color-secondary-light;
+            color: #000;
             font-weight: bold;
             display: block;
           }
@@ -59,7 +59,7 @@
           &--name {
             font-size: 1.6rem;
   
-            color: $color-secondary-light;
+            color: #000;
             font-weight: bold;
             display: block;
           }
@@ -80,7 +80,7 @@
         &--name {
           margin-top: 5px;
           display: block;
-          color: $color-secondary-dark;
+          color:#000;
         }
       }
   
@@ -96,7 +96,7 @@
         &--name {
           margin-top: 5px;
           display: block;
-          color: $color-secondary-dark;
+          color: #000;
         }
       }
     }
@@ -284,7 +284,7 @@
           }
         
           &--cart {
-            background-color: $color-primary;
+            background-color: $color-grey-light-1;
           }
         }
   
