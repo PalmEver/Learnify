@@ -55,7 +55,9 @@ const ShowCourses = ({ course }: Props) => {
         <Col>
           {/* <div className="container"> */}
           <div className="card">
-            <h3 className="title">{course.title}</h3>
+            <Link to={`/course/${course.id}`}>
+              <h3 className="title">{course.title}</h3>
+            </Link>
             <div className="bar">
               <div className="emptybar"></div>
               <div className="filledbar"></div>
@@ -87,11 +89,15 @@ const ShowCourses = ({ course }: Props) => {
                 </div>
               )}
             </div>
-            {/* <div className="circle">
-              <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-                <circle className="stroke" cx="60" cy="60" r="50" />
+            <div className="circle">
+              <svg
+                className="round"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle className="stroke" cx="40" cy="40" r="35" />
               </svg>
-            </div> */}
+            </div>
           </div>
           {/* </div> */}
           {/* <Card

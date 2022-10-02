@@ -1,4 +1,4 @@
-$font-primary: "Lato";
+$font-primary: "Righteous";
 
 // RESPONSIVE BREAKPOINTS
 $bp-largest: 75em; // 1200px
@@ -13,7 +13,7 @@ $color-grey-dark-1: #ffff;
 $color-grey-dark-2: #669497;
 
 $color-primary: #ffff;
-$color-primary-dark: #4d4d4d;
+$color-primary-dark: #669497;
 
 // COLOR VARIABLES
 $color-secondary-light: #e39c38;
@@ -27,18 +27,21 @@ $shadow-light: 0 2rem 5rem rgba(0, 0, 0, 0.06);
 $border: 1px solid #f4f2f2;
 $border-dark: 2px solid #f4f2f2;
 
+
 html {
     box-sizing: border-box;
     // background-color: #2e3033 !important;
 }
 
 body {
-    font-family: $font-primary;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
     // background-color: #2e3033 !important;
 }
 
 h1, h2 {
+    font-family: $font-primary !important;
     text-align: center !important;
+    font-weight: lighter;
 }
 
 .ant-row {
