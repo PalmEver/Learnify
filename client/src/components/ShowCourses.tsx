@@ -53,7 +53,6 @@ const ShowCourses = ({ course }: Props) => {
     <>
       <Col className="gutter-row" span={spanVal}>
         <Col>
-          {/* <div className="container"> */}
           <div className="card">
             <Link to={`/course/${course.id}`}>
               <h3 className="title">{course.title}</h3>
@@ -99,43 +98,6 @@ const ShowCourses = ({ course }: Props) => {
               </svg>
             </div>
           </div>
-          {/* </div> */}
-          {/* <Card
-          hoverable
-          cover={<img width="100%" alt="course-cover" src={course.image} />}
-        >
-          <Link to={`/course/${course.id}`}>
-            <div className="course__title">{course.title}</div>
-          </Link>
-          <div className="course__instructor">{course.instructor}</div>
-          <div className="course__rating">
-            {course.rating}
-            <span>{showStars(course.rating)}</span>
-          </div>
-          <div className="course__bottom">
-            <div className="course__bottom__price">{course.price}</div>
-            {userCourses?.find((item: Course) => item.id === course.id) !==
-            undefined ? (
-              <Link to={`/learn/${course.id}/${currentLecture}`}>
-                <div className="course__bottom__cart">Go to Course</div>
-              </Link>
-            ) : basket?.items.find((item) => item.courseId === course.id) !==
-              undefined ? (
-              <Link to="/basket">
-                <div className="course__bottom__cart">Go to Cart</div>
-              </Link>
-            ) : (
-              <div
-                onClick={() =>
-                  dispatch(addBasketItemAsync({ courseId: course.id }))
-                }
-                className="course__bottom__cart"
-              >
-                Add to Cart
-              </div>
-            )}
-          </div>
-        </Card> */}
         </Col>
       </Col>
     </>
